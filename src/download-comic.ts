@@ -70,6 +70,8 @@ async function getDownloadParts(downloadUrl: string) {
       checkIsHost(downloadUrl, ZIPPYSHARE_HOST)
     ) {
       fileName = getFilenameFromContentDisposition(res);
+    } else if (checkIsHost(res.url, MEDIAFIRE_HOST)) { // Download is redirected to mediafire
+      return getDownloadParts(res.url);
     } else {
       fileName = decodeURIComponent(realDownloadUrl.split("/").pop() as string);
     }
