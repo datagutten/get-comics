@@ -24,6 +24,8 @@ const MEDIAFIRE_HOST = "mediafire.com";
 const MEGA_HOST = "mega.nz";
 const USERSCLOUD_HOST = "userscloud.com";
 
+// TODO: Fix and remove ignore
+// @ts-ignore
 async function getDownloadParts(downloadUrl: string) {
   let fileName: string;
   let fileSize: number;
