@@ -24,7 +24,13 @@ const MEDIAFIRE_HOST = "mediafire.com";
 const MEGA_HOST = "mega.nz";
 const USERSCLOUD_HOST = "userscloud.com";
 
-async function getDownloadParts(downloadUrl: string) {
+interface DownloadReturn {
+  fileName: string;
+  fileSize: number;
+  downloadStream: NodeJS.ReadableStream;
+}
+
+async function getDownloadParts(downloadUrl: string): Promise<DownloadReturn> {
   let fileName: string;
   let fileSize: number;
   let downloadStream: NodeJS.ReadableStream;
@@ -70,7 +76,8 @@ async function getDownloadParts(downloadUrl: string) {
       checkIsHost(downloadUrl, ZIPPYSHARE_HOST)
     ) {
       fileName = getFilenameFromContentDisposition(res);
-    } else if (checkIsHost(res.url, MEDIAFIRE_HOST)) { // Download is redirected to mediafire
+    } else if (checkIsHost(res.url, MEDIAFIRE_HOST)) {
+      // Download is redirected to mediafire
       return getDownloadParts(res.url);
     } else {
       fileName = decodeURIComponent(realDownloadUrl.split("/").pop() as string);
