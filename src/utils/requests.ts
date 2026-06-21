@@ -2,26 +2,30 @@ import { URL } from "url";
 import fetch from "node-fetch";
 import type { Response } from "node-fetch";
 
-export async function getRedirectLocation(url: string) {
-  if (url.includes("sh.st")) {
+export async function getRedirectLocation(url: string): Promise<string> {
+  try {
+    if (url.includes("sh.st")) {
+      const redirectRes = await fetch(url, {
+        method: "HEAD",
+        headers: {
+          "User-Agent": "",
+        },
+      });
+
+      const redirectUrl = redirectRes.url;
+
+      return redirectUrl || url;
+    }
+
     const redirectRes = await fetch(url, {
       method: "HEAD",
-      headers: {
-        "User-Agent": "",
-      },
+      redirect: "manual",
     });
-
-    const redirectUrl = redirectRes.url;
-
+    const redirectUrl = redirectRes.headers.get("location");
     return redirectUrl || url;
+  } catch (error) {
+    return "";
   }
-
-  const redirectRes = await fetch(url, {
-    method: "HEAD",
-    redirect: "manual",
-  });
-  const redirectUrl = redirectRes.headers.get("location");
-  return redirectUrl || url;
 }
 
 export function getFilenameFromContentDisposition(res: Response) {
