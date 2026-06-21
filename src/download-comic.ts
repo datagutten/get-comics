@@ -70,6 +70,9 @@ async function getDownloadParts(downloadUrl: string): Promise<DownloadReturn> {
     if (!res.ok) {
       throw new Error(`HTTP error: ${res.status}`);
     }
+    if (res.redirected) {
+      realDownloadUrl = res.url;
+    }
 
     downloadStream = res.body as NodeJS.ReadableStream;
     fileSize = Number(res.headers.get("content-length"));
