@@ -1,0 +1,7 @@
+services:
+  get:
+    build: .
+    volumes:
+    - ./download:/download
+    cap_add:
+    - SYS_ADMIN
